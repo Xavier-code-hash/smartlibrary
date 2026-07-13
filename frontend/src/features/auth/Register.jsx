@@ -19,7 +19,8 @@ export default function Register() {
       return;
     }
     try {
-      await api.post('/auth/register/', form);
+      const { confirmPassword, ...payload } = form;
+      await api.post('/auth/register/', payload);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.detail || 'Registration failed');

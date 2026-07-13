@@ -14,8 +14,14 @@ export default function Profile() {
   const [history, setHistory] = useState([]);
   const [profile, setProfile] = useState({});
 
+  const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || profile.username || 'User';
+  const memberSince = profile.date_joined ? formatDate(profile.date_joined) : 'Unknown';
+  const totalBorrowed = history.length;
+  const currentlyBorrowed = history.filter((t) => t.status === 'issued').length;
+  const overdueCount = history.filter((t) => t.status === 'overdue').length;
+
   useEffect(() => {
-    api.get('/auth/profile/')
+    api.get('/auth/me/')
       .then(({ data }) => setProfile(data || {}))
       .catch(() => {});
     api.get('/transactions/borrow/my_borrows/')
@@ -29,21 +35,21 @@ export default function Profile() {
   return (
     <div className="profile-page">
       <div className="profile-card">
-        <div className="profile-avatar">{profile.full_name?.charAt(0) || profile.username?.charAt(0) || 'U'}</div>
+        <div className="profile-avatar">{fullName.charAt(0)}</div>
         <div className="profile-info">
-          <h2>{profile.full_name || profile.username}</h2>
+          <h2>{fullName}</h2>
           <p className="profile-handle">@{profile.username}</p>
           <div className="profile-meta">
             <span>{profile.email}</span>
-            <span>{profile.phone}</span>
-            <span>Member since {formatDate(profile.member_since)}</span>
-            <span>ID: {profile.membership_id}</span>
+            <span>{profile.phone || '-'}</span>
+            <span>Member since {memberSince}</span>
+            <span>ID: {profile.membership_id || '-'}</span>
           </div>
         </div>
         <div className="profile-stats">
-          <div><strong>{profile.total_borrowed}</strong><span>Total Borrowed</span></div>
-          <div><strong>{profile.currently_borrowed}</strong><span>Current</span></div>
-          <div><strong>{profile.overdue_count}</strong><span>Overdue</span></div>
+          <div><strong>{totalBorrowed}</strong><span>Total Borrowed</span></div>
+          <div><strong>{currentlyBorrowed}</strong><span>Current</span></div>
+          <div><strong>{overdueCount}</strong><span>Overdue</span></div>
         </div>
       </div>
 

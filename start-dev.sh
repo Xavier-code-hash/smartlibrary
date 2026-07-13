@@ -10,7 +10,7 @@ if [ -x "$ROOT/stop-dev.sh" ]; then
 fi
 
 cd "$BACKEND_DIR"
-"$BACKEND_DIR/venv/bin/python" manage.py runserver 0.0.0.0:8001 > /tmp/closure-backend.log 2>&1 &
+"$BACKEND_DIR/venv/bin/python" manage.py runserver 0.0.0.0:8000 > /tmp/closure-backend.log 2>&1 &
 BACKEND_PID=$!
 
 cd "$FRONTEND_DIR"
@@ -19,6 +19,6 @@ FRONTEND_PID=$!
 
 trap 'kill "$BACKEND_PID" "$FRONTEND_PID" 2>/dev/null || true' EXIT
 
-echo "Backend running at http://localhost:8001"
+echo "Backend running at http://localhost:8000"
 echo "Frontend running at http://localhost:3000"
 wait "$BACKEND_PID" "$FRONTEND_PID"

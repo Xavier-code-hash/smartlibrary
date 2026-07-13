@@ -59,6 +59,8 @@ export default function Borrow() {
     const id = String(copy.id);
     setBookCopyId(id);
     setManualId(id);
+    setCopies([]);
+    setSearchQuery('');
     setMessage(`Selected Copy #${id} - ${copy.book?.title || 'Unknown book'} (${copy.status})`);
   };
 
