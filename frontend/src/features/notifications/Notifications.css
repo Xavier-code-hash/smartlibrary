@@ -1,0 +1,108 @@
+.notifications-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-4);
+}
+
+.notifications-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
+}
+
+.notifications-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.notifications-badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.notifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.notification-item {
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-xs);
+}
+
+.notification-item.unread {
+  background: var(--primary-bg);
+  border-color: var(--primary-light);
+}
+
+.notification-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--border-dark);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notification-dot.active {
+  background: var(--primary);
+}
+
+.notification-body {
+  flex: 1;
+}
+
+.notification-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-1);
+}
+
+.notification-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.tag-due_soon { background: #e0f2fe; color: #0369a1; }
+.tag-overdue { background: var(--danger-bg); color: var(--danger-dark); }
+.tag-fine { background: var(--warning-bg); color: var(--warning-dark); }
+.tag-reserved { background: #ecfdf5; color: #047857; }
+.tag-returned { background: #f1f5f9; color: #475569; }
+.tag-announcement { background: #faf5ff; color: #7e22ce; }
+.tag-system { background: var(--bg-tertiary); color: var(--text-secondary); }
+.tag-new_arrival { background: #fff7ed; color: #c2410c; }
+
+.notification-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.notification-message {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}

@@ -1,0 +1,124 @@
+.profile-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-4);
+}
+
+.profile-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-5);
+  padding: var(--spacing-6);
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-8);
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.profile-handle {
+  margin: 0.15rem 0 0.5rem;
+  color: var(--text-muted);
+}
+
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-4);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.profile-stats {
+  display: flex;
+  gap: var(--spacing-6);
+}
+
+.profile-stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-stats strong {
+  font-size: 1.3rem;
+  color: var(--primary-dark);
+}
+
+.profile-stats span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.profile-page h3 {
+  margin-bottom: var(--spacing-4);
+}
+
+.profile-history {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.profile-history th,
+.profile-history td {
+  text-align: left;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+.profile-history th {
+  background: var(--bg-tertiary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+}
+
+.profile-history tr:last-child td {
+  border-bottom: none;
+}
+
+.status-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.status-issued { background: #e0f2fe; color: #0369a1; }
+.status-returned { background: #ecfdf5; color: #047857; }
+.status-overdue { background: var(--danger-bg); color: var(--danger-dark); }
+.status-lost { background: #f1f5f9; color: #475569; }

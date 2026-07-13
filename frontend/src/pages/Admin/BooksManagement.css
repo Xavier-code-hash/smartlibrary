@@ -1,0 +1,13 @@
+.books-management {
+  animation: fadeIn 0.3s ease;
+}
+
+.books-management h1 {
+  margin-bottom: var(--spacing-6);
+}
+
+.books-management .book-list {
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--border);
+  margin-top: var(--spacing-6);
+}
