@@ -63,9 +63,99 @@
   border: 1px solid var(--border);
 }
 
+.chart-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
 .chart-card h3 {
   font-size: var(--text-lg);
-  margin-bottom: var(--spacing-4);
+  margin: 0;
+}
+
+.chart-card-subtitle {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.chart-body {
+  position: relative;
+  height: 300px;
+}
+
+.pie-card-body {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  flex-wrap: wrap;
+}
+
+.pie-3d {
+  flex: 1 1 200px;
+  max-width: 240px;
+  height: 220px;
+  perspective: 900px;
+}
+
+.pie-3d canvas {
+  transform: rotateX(20deg);
+  transform-origin: center 58%;
+  filter: drop-shadow(0 16px 10px rgba(15, 23, 42, 0.18));
+  transition: transform 0.3s ease;
+}
+
+.pie-3d:hover canvas {
+  transform: rotateX(14deg) scale(1.02);
+}
+
+.pie-legend {
+  flex: 1 1 180px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.pie-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--text-sm);
+  padding: var(--spacing-1) 0;
+}
+
+.pie-legend-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.pie-legend-label {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.pie-legend-value {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.pie-legend-pct {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  min-width: 38px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .quick-links {
@@ -79,7 +169,7 @@
   display: inline-block;
   padding: var(--spacing-3) var(--spacing-6);
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   border-radius: var(--radius-md);
   text-decoration: none;
   font-weight: 500;
@@ -137,7 +227,7 @@
 .error {
   padding: var(--spacing-8);
   text-align: center;
-  color: var(--error);
+  color: var(--danger);
 }
 
 .notifications-list {

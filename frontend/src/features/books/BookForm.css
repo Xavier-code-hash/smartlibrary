@@ -39,7 +39,7 @@
   padding: var(--spacing-3) var(--spacing-4);
   background: var(--danger-bg);
   color: var(--danger-dark);
-  border: 1px solid #fecaca;
+  border: 1px solid var(--status-danger-bg);
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -49,7 +49,7 @@
 .book-form-error-warning {
   background: var(--warning-bg);
   color: var(--warning-dark);
-  border-color: #fde68a;
+  border-color: var(--status-warning-bg);
 }
 
 .book-form-error-icon {
@@ -60,7 +60,7 @@
   height: 20px;
   border-radius: 50%;
   background: var(--danger);
-  color: white;
+  color: var(--text-on-primary);
   font-size: 12px;
   font-weight: 700;
   flex-shrink: 0;
@@ -68,7 +68,7 @@
 
 .book-form-error-warning .book-form-error-icon {
   background: var(--warning);
-  color: white;
+  color: var(--text-on-primary);
 }
 
 .book-form-grid {
@@ -148,7 +148,7 @@
 .form-field select:focus,
 .form-field textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 0 0 3px var(--focus-ring);
   outline: none;
 }
 
@@ -177,7 +177,7 @@
 
 .multi-select option:checked {
   background: var(--primary) linear-gradient(0deg, var(--primary) 0%, var(--primary) 100%);
-  color: #fff;
+  color: var(--text-on-primary);
 }
 
 .field-error {

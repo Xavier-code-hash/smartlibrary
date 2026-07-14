@@ -14,6 +14,19 @@
   --warning-dark: #fde68a;
   --warning-bg: #451a03;
 
+  --status-success-bg: rgba(52, 211, 153, 0.15);
+  --status-success-text: #6ee7b7;
+  --status-warning-bg: rgba(251, 191, 36, 0.15);
+  --status-warning-text: #fde68a;
+  --status-danger-bg: rgba(248, 113, 113, 0.15);
+  --status-danger-text: #fca5a5;
+  --status-neutral-bg: rgba(51, 65, 85, 0.5);
+  --status-neutral-text: #94a3b8;
+
+  --focus-ring: rgba(129, 140, 248, 0.3);
+  --text-on-primary: #ffffff;
+  --scrim: rgba(15, 23, 42, 0.6);
+
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
@@ -28,21 +41,6 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-}
-
-[data-theme="dark"] .status-available {
-  background: rgba(52, 211, 153, 0.15);
-  color: #6ee7b7;
-}
-
-[data-theme="dark"] .status-issued {
-  background: rgba(251, 191, 36, 0.15);
-  color: #fde68a;
-}
-
-[data-theme="dark"] .status-lost {
-  background: rgba(248, 113, 113, 0.15);
-  color: #fca5a5;
 }
 
 [data-theme="dark"] .notification-item.unread {

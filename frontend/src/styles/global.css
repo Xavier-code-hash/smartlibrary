@@ -14,6 +14,19 @@
   --warning-dark: #d97706;
   --warning-bg: #fffbeb;
 
+  --status-success-bg: #dcfce7;
+  --status-success-text: #166534;
+  --status-warning-bg: #fef3c7;
+  --status-warning-text: #92400e;
+  --status-danger-bg: #fee2e2;
+  --status-danger-text: #991b1b;
+  --status-neutral-bg: #f1f5f9;
+  --status-neutral-text: #475569;
+
+  --focus-ring: rgba(79, 70, 229, 0.3);
+  --text-on-primary: #ffffff;
+  --scrim: rgba(15, 23, 42, 0.6);
+
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
@@ -163,7 +176,7 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 input::placeholder, textarea::placeholder {
@@ -293,18 +306,18 @@ tbody tr:last-child td {
 }
 
 .status-available {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .status-issued {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
 }
 
 .status-lost {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--status-danger-bg);
+  color: var(--status-danger-text);
 }
 
 .unread {
@@ -403,7 +416,7 @@ ul {
 
 .search-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1), var(--shadow-md);
+  box-shadow: 0 0 0 4px var(--focus-ring), var(--shadow-md);
 }
 
 .search-input::placeholder {
@@ -523,6 +536,35 @@ ul {
   margin-bottom: var(--spacing-6);
 }
 
+.borrow-tabs {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.borrow-tab {
+  border: none;
+  background: transparent;
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--transition-fast);
+}
+
+.borrow-tab:hover {
+  color: var(--primary);
+}
+
+.borrow-tab.active {
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary);
+}
+
 .borrow-page .scanned-info {
   margin: var(--spacing-4) 0;
   padding: var(--spacing-3) var(--spacing-4);
@@ -538,7 +580,7 @@ ul {
   padding: var(--spacing-3) var(--spacing-4);
   border-radius: var(--radius-md);
   background: var(--accent);
-  color: white;
+  color: var(--text-on-primary);
   font-size: var(--text-sm);
   font-weight: 500;
 }

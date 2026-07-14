@@ -22,7 +22,7 @@
   height: 72px;
   border-radius: var(--radius-full);
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,7 +118,7 @@
   border-radius: var(--radius-full);
 }
 
-.status-issued { background: #e0f2fe; color: #0369a1; }
-.status-returned { background: #ecfdf5; color: #047857; }
-.status-overdue { background: var(--danger-bg); color: var(--danger-dark); }
-.status-lost { background: #f1f5f9; color: #475569; }
+.status-issued { background: var(--status-warning-bg); color: var(--status-warning-text); }
+.status-returned { background: var(--status-success-bg); color: var(--status-success-text); }
+.status-overdue { background: var(--status-danger-bg); color: var(--status-danger-text); }
+.status-lost { background: var(--status-neutral-bg); color: var(--status-neutral-text); }

@@ -65,7 +65,7 @@
 }
 
 .toast-success .toast-message {
-  color: #065f46;
+  color: var(--status-success-text);
 }
 
 .toast-error {
@@ -73,7 +73,7 @@
 }
 
 .toast-error .toast-message {
-  color: #991b1b;
+  color: var(--status-danger-text);
 }
 
 .toast-warning {
@@ -81,7 +81,7 @@
 }
 
 .toast-warning .toast-message {
-  color: #92400e;
+  color: var(--status-warning-text);
 }
 
 .toast-info {
@@ -89,7 +89,7 @@
 }
 
 .toast-info .toast-message {
-  color: #3730a3;
+  color: var(--primary-dark);
 }
 
 @keyframes toastIn {

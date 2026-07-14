@@ -40,7 +40,7 @@
 
 .login-form input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .login-form input::placeholder {
@@ -85,10 +85,15 @@
 
 .success {
   text-align: center;
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
   padding: var(--spacing-3) var(--spacing-4);
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;
+}
+
+.login-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }

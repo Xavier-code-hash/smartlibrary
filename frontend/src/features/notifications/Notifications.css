@@ -18,7 +18,7 @@
 
 .notifications-badge {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   font-size: var(--text-sm);
   font-weight: 600;
   padding: 0.15rem 0.6rem;
@@ -85,14 +85,14 @@
   color: var(--text-secondary);
 }
 
-.tag-due_soon { background: #e0f2fe; color: #0369a1; }
+.tag-due_soon { background: var(--primary-bg); color: var(--primary-dark); }
 .tag-overdue { background: var(--danger-bg); color: var(--danger-dark); }
 .tag-fine { background: var(--warning-bg); color: var(--warning-dark); }
-.tag-reserved { background: #ecfdf5; color: #047857; }
-.tag-returned { background: #f1f5f9; color: #475569; }
-.tag-announcement { background: #faf5ff; color: #7e22ce; }
+.tag-reserved { background: var(--status-success-bg); color: var(--status-success-text); }
+.tag-returned { background: var(--status-neutral-bg); color: var(--status-neutral-text); }
+.tag-announcement { background: var(--primary-bg); color: var(--primary-dark); }
 .tag-system { background: var(--bg-tertiary); color: var(--text-secondary); }
-.tag-new_arrival { background: #fff7ed; color: #c2410c; }
+.tag-new_arrival { background: var(--warning-bg); color: var(--warning-dark); }
 
 .notification-time {
   font-size: 0.75rem;

@@ -24,7 +24,7 @@
   padding: var(--spacing-3) var(--spacing-4);
   background: var(--primary-bg);
   color: var(--primary-dark);
-  border: 1px solid rgba(79, 70, 229, 0.15);
+  border: 1px solid var(--focus-ring);
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -145,18 +145,18 @@
 }
 
 .role-admin {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--status-danger-bg);
+  color: var(--status-danger-text);
 }
 
 .role-librarian {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
 }
 
 .role-member {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .users-form .form-row {
@@ -200,7 +200,7 @@
 .users-form select:focus,
 .users-form textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 0 0 3px var(--focus-ring);
   outline: none;
 }
 

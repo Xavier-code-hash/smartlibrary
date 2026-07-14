@@ -17,6 +17,8 @@ import Search from './pages/Search';
 import Dashboard from './pages/Dashboard';
 import BooksManagement from './pages/Admin/BooksManagement';
 import Users from './pages/Admin/Users';
+import AdminHistory from './pages/Admin/History';
+import Payments from './pages/Admin/Payments';
 import Profile from './features/profile/Profile';
 import Notifications from './features/notifications/Notifications';
 import Borrow from './features/borrow/Borrow';
@@ -75,6 +77,8 @@ export default function App() {
               <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
               <Route path="/borrow" element={<ProtectedRoute><Borrow /></ProtectedRoute>} />
               <Route path="/admin/books" element={<ProtectedRoute roles={['admin', 'librarian']}><BooksManagementWrapper /></ProtectedRoute>} />
+              <Route path="/admin/history" element={<ProtectedRoute roles={['admin', 'librarian']}><AdminHistory /></ProtectedRoute>} />
+              <Route path="/admin/payments" element={<ProtectedRoute roles={['admin', 'librarian']}><Payments /></ProtectedRoute>} />
               <Route path="/admin/users" element={<ProtectedRoute roles={['admin']}><Users /></ProtectedRoute>} />
             </Routes>
           </main>

@@ -2,12 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import Button from '../../components/common/Button';
 import QRScanner from '../../components/common/QRScanner';
+import History from './History';
 
 export default function Borrow() {
   const [mode, setMode] = useState('scan');
   const [bookCopyId, setBookCopyId] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState('borrow');
 
   const [manualId, setManualId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -104,6 +106,27 @@ export default function Borrow() {
     <div className="borrow-page">
       <h2>Borrow / Return</h2>
 
+      <div className="borrow-tabs">
+        <button
+          type="button"
+          className={`borrow-tab ${tab === 'borrow' ? 'active' : ''}`}
+          onClick={() => setTab('borrow')}
+        >
+          Issue / Return
+        </button>
+        <button
+          type="button"
+          className={`borrow-tab ${tab === 'history' ? 'active' : ''}`}
+          onClick={() => setTab('history')}
+        >
+          Transaction History
+        </button>
+      </div>
+
+      {tab === 'history' ? (
+        <History />
+      ) : (
+      <>
       <div className="mode-toggle">
         <button
           type="button"
@@ -177,6 +200,8 @@ export default function Borrow() {
       </div>
 
       {message && <p className="message">{message}</p>}
+      </>
+      )}
     </div>
   );
 }
