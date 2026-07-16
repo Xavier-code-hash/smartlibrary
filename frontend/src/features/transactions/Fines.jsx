@@ -72,7 +72,10 @@ export default function Fines() {
   };
 
   const handlePayAll = async () => {
-    if (unpaid.length === 0) return;
+    if (unpaid.length === 0) {
+      toast('You have no outstanding fines to pay.', { variant: 'info' });
+      return;
+    }
     setSubmitting(true);
     let lastMsg = '';
     try {
@@ -105,11 +108,9 @@ export default function Fines() {
           </p>
         </div>
         <div className="fines-header-actions">
-          {unpaid.length > 0 && (
-            <Button variant="primary" onClick={handlePayAll} disabled={submitting}>
-              Pay All
-            </Button>
-          )}
+          <Button variant="primary" onClick={handlePayAll} disabled={submitting}>
+            Pay All
+          </Button>
           <Button variant="outline" onClick={fetchFines} disabled={loading}>
             Refresh
           </Button>
@@ -118,8 +119,6 @@ export default function Fines() {
 
       {loading ? (
         <p className="fines-loading">Loading fines…</p>
-      ) : fines.length === 0 ? (
-        <p className="fines-empty">You have no fines. 🎉</p>
       ) : (
         <div className="fines-table-wrapper">
           <table className="fines-table">
@@ -133,39 +132,45 @@ export default function Fines() {
               </tr>
             </thead>
             <tbody>
-              {fines.map((f) => (
-                <tr key={f.id} className={f.paid ? 'fines-row-paid' : ''}>
-                  <td className="fines-cell-book">{f.book_title}</td>
-                  <td className="fines-cell-amount">KES {Number(f.amount).toFixed(2)}</td>
-                  <td className="fines-cell-date">{formatDate(f.created_at)}</td>
-                  <td>
-                    {f.paid ? (
-                      <span className="fine-status paid">Paid</span>
-                    ) : f.payment_status === 'pending' ? (
-                      <span className="fine-status pending">Pending</span>
-                    ) : f.payment_status === 'failed' ? (
-                      <span className="fine-status failed">Failed</span>
-                    ) : (
-                      <span className="fine-status unpaid">Unpaid</span>
-                    )}
-                  </td>
-                  <td className="fines-cell-action">
-                    {!f.paid && (
-                      <button className="btn-link" onClick={() => startPay(f)} disabled={submitting}>
-                        Pay with M-Pesa
-                      </button>
-                    )}
-                    {f.paid && f.receipt_number && (
-                      <button className="btn-link" onClick={() => setReceiptFine(f)}>
-                        View Receipt
-                      </button>
-                    )}
-                    {f.paid && !f.receipt_number && (
-                      <span className="fines-receipt">Settled</span>
-                    )}
-                  </td>
+              {fines.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="fines-empty">You have no fines. 🎉</td>
                 </tr>
-              ))}
+              ) : (
+                fines.map((f) => (
+                  <tr key={f.id} className={f.paid ? 'fines-row-paid' : ''}>
+                    <td className="fines-cell-book">{f.book_title}</td>
+                    <td className="fines-cell-amount">KES {Number(f.amount).toFixed(2)}</td>
+                    <td className="fines-cell-date">{formatDate(f.created_at)}</td>
+                    <td>
+                      {f.paid ? (
+                        <span className="fine-status paid">Paid</span>
+                      ) : f.payment_status === 'pending' ? (
+                        <span className="fine-status pending">Pending</span>
+                      ) : f.payment_status === 'failed' ? (
+                        <span className="fine-status failed">Failed</span>
+                      ) : (
+                        <span className="fine-status unpaid">Unpaid</span>
+                      )}
+                    </td>
+                    <td className="fines-cell-action">
+                      {!f.paid && (
+                        <button className="btn-link" onClick={() => startPay(f)} disabled={submitting}>
+                          Pay with M-Pesa
+                        </button>
+                      )}
+                      {f.paid && f.receipt_number && (
+                        <button className="btn-link" onClick={() => setReceiptFine(f)}>
+                          View Receipt
+                        </button>
+                      )}
+                      {f.paid && !f.receipt_number && (
+                        <span className="fines-receipt">Settled</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
