@@ -8,6 +8,22 @@ export function getBook(id) {
   return api.get(`/books/${id}/`);
 }
 
+export function getBookQr(id) {
+  return api.get(`/books/${id}/qr/`, { responseType: 'blob' });
+}
+
+export function getBookCopies(id) {
+  return api.get(`/books/${id}/copies/`);
+}
+
+export function createAuthor(data) {
+  return api.post('/books/authors/', data);
+}
+
+export function createPublisher(data) {
+  return api.post('/books/publishers/', data);
+}
+
 export function createBook(data, config) {
   return api.post('/books/', data, config);
 }

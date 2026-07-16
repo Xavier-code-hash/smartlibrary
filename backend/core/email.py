@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 WELCOME_SUBJECT = 'Welcome to Closure Library'
 PASSWORD_RESET_SUBJECT = 'Password Reset Request'
 OVERDUE_SUBJECT = 'Overdue Book Reminder'
+DUE_SOON_SUBJECT = 'Return Reminder: Your book is due soon'
 
 
 def send_email(subject, message, recipient_list):
@@ -61,4 +62,16 @@ def send_overdue_reminder_email(user, book_title):
         "Closure Library Team"
     )
     return send_email(OVERDUE_SUBJECT, message, [user.email])
+
+
+def send_due_date_reminder_email(user, book_title, due_date_str):
+    message = (
+        f"Dear {user.username},\n\n"
+        f"This is a friendly reminder that \"{book_title}\" "
+        f"is due for return on {due_date_str}.\n"
+        "Please return it on time to avoid fines.\n\n"
+        "Thank you,\n"
+        "Closure Library Team"
+    )
+    return send_email(DUE_SOON_SUBJECT, message, [user.email])
 

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { ROLES } from '../../utils/constants';
+import { useClickOutside } from '../../utils/useClickOutside';
 import './Header.css';
 
 export default function Header() {
@@ -9,11 +10,16 @@ export default function Header() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
+  const adminRef = useRef(null);
+
+  const closeAdmin = useCallback(() => setAdminOpen(false), []);
+  useClickOutside(adminRef, closeAdmin, adminOpen);
 
   const handleLogout = () => {
     logout();
     navigate('/');
     setMobileOpen(false);
+    setAdminOpen(false);
   };
 
   const closeMobile = () => setMobileOpen(false);
@@ -46,7 +52,7 @@ export default function Header() {
           <NavLink to="/notifications" onClick={closeMobile}>Notifications</NavLink>
 
           {isStaff && (
-            <div className={`nav-dropdown ${adminOpen ? 'open' : ''}`}>
+            <div className={`nav-dropdown ${adminOpen ? 'open' : ''}`} ref={adminRef}>
               <button
                 className="nav-dropdown-trigger"
                 aria-expanded={adminOpen}

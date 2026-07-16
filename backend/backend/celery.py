@@ -14,4 +14,8 @@ app.conf.beat_schedule = {
         'task': 'transactions.tasks.send_overdue_reminders',
         'schedule': crontab(hour=6, minute=0),
     },
+    'send-due-date-reminders-daily': {
+        'task': 'transactions.tasks.send_due_date_reminders',
+        'schedule': crontab(hour=7, minute=0),
+    },
 }

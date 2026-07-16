@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from books.models import BookCopy
 from core.models import Notification
 from .models import BorrowTransaction, Reservation, Fine, Payment, PaymentReceipt
+from core.models import Notification
 from .serializers import (
     BorrowTransactionSerializer, BorrowCreateSerializer,
     ReturnSerializer, ReservationSerializer, FineSerializer,
@@ -31,6 +32,8 @@ class BorrowViewSet(viewsets.ModelViewSet):
             ).all()
         return BorrowTransaction.objects.filter(user=self.request.user).select_related('book_copy__book')
 
+    MAX_BORROWS_WITH_RETURN_ISSUES = 10
+
     @action(detail=False, methods=['post'])
     def issue(self, request):
         serializer = BorrowCreateSerializer(data=request.data)
@@ -40,14 +43,52 @@ class BorrowViewSet(viewsets.ModelViewSet):
         except BookCopy.DoesNotExist:
             return Response({'detail': 'Copy not available'}, status=status.HTTP_400_BAD_REQUEST)
 
+        user = request.user
+
+        # Rule 1: a member may not borrow more than one copy of the same book.
+        active_for_book = BorrowTransaction.objects.filter(
+            user=user,
+            book_copy__book=copy.book,
+            status__in=['issued', 'overdue'],
+        ).exists()
+        if active_for_book:
+            return Response(
+                {'detail': f'You already have an active borrow of "{copy.book.title}". '
+                           f'Only one copy of the same book can be borrowed at a time.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Rule 2: members with a tendency of not returning books are capped at 10 active borrows.
+        if getattr(user, 'has_return_issues', False):
+            active_count = BorrowTransaction.objects.filter(
+                user=user, status__in=['issued', 'overdue']
+            ).count()
+            if active_count >= self.MAX_BORROWS_WITH_RETURN_ISSUES:
+                return Response(
+                    {'detail': f'You have reached the maximum of '
+                               f'{self.MAX_BORROWS_WITH_RETURN_ISSUES} active borrows allowed '
+                               f'for accounts with outstanding return issues.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
         copy.status = 'issued'
         copy.save()
 
+        due_date = timezone.now() + timedelta(days=14)
         transaction = BorrowTransaction.objects.create(
-            user=request.user,
+            user=user,
             book_copy=copy,
-            due_date=timezone.now() + timedelta(days=14),
+            due_date=due_date,
             issued_by=request.user,
+        )
+        due_date_str = due_date.strftime('%A, %B %d, %Y')
+        Notification.objects.create(
+            recipient=request.user,
+            message=(
+                f'You have borrowed "{copy.book.title}". '
+                f'Please return it by {due_date_str}. '
+                f'That is exactly 14 days from today.'
+            ),
         )
         out = BorrowTransactionSerializer(transaction)
         return Response(out.data, status=status.HTTP_201_CREATED)

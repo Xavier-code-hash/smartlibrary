@@ -5,10 +5,10 @@ from .models import CustomUser, Notification
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    list_display = ['username', 'email', 'role', 'is_active']
-    list_filter = ['role', 'is_active']
+    list_display = ['username', 'email', 'role', 'has_return_issues', 'is_active']
+    list_filter = ['role', 'has_return_issues', 'is_active']
     fieldsets = UserAdmin.fieldsets + (
-        ('Additional Info', {'fields': ('role', 'phone', 'address', 'date_of_birth', 'membership_id')}),
+        ('Additional Info', {'fields': ('role', 'phone', 'address', 'date_of_birth', 'membership_id', 'has_return_issues')}),
     )
 
 

@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createBook, getBook, updateBook, getBooks } from './services/booksApi';
+import { createBook, getBook, updateBook, getBooks, createAuthor, createPublisher } from './services/booksApi';
 import api from '../../services/api';
 import Button from '../../components/common/Button';
 import { useToast } from '../../components/common/Toast';
+import { useClickOutside } from '../../utils/useClickOutside';
 import './BookForm.css';
 
 export default function BookForm() {
@@ -20,11 +21,22 @@ export default function BookForm() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [isbnCheck, setIsbnCheck] = useState({ checking: false, duplicate: null });
   const isbnTimerRef = useRef(null);
+  const authorsSelectRef = useRef(null);
+  const categoriesSelectRef = useRef(null);
+  const [authorsOpen, setAuthorsOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  useClickOutside(authorsSelectRef, () => setAuthorsOpen(false), authorsOpen);
+  useClickOutside(categoriesSelectRef, () => setCategoriesOpen(false), categoriesOpen);
+  const [newAuthor, setNewAuthor] = useState('');
+  const [newPublisher, setNewPublisher] = useState('');
+  const [addingAuthor, setAddingAuthor] = useState(false);
+  const [addingPublisher, setAddingPublisher] = useState(false);
   const [form, setForm] = useState({
     title: '',
     isbn: '',
     publisher: '',
     publication_year: '',
+    year_purchased: '',
     description: '',
     authors: [],
     categories: [],
@@ -55,6 +67,7 @@ export default function BookForm() {
           isbn: data.isbn || '',
           publisher: data.publisher?.id || '',
           publication_year: data.publication_year || '',
+          year_purchased: data.year_purchased || '',
           description: data.description || '',
           authors: data.authors?.map((a) => a.id) || [],
           categories: data.categories?.map((c) => c.id) || [],
@@ -64,6 +77,40 @@ export default function BookForm() {
       })
       .catch(() => setError('Failed to load book'));
   }, [id]);
+
+  const handleAddAuthor = async () => {
+    const name = newAuthor.trim();
+    if (!name) return;
+    setAddingAuthor(true);
+    try {
+      const { data } = await createAuthor({ name });
+      setAuthors((prev) => [...prev, data]);
+      setForm((prev) => ({ ...prev, authors: [...prev.authors, data.id] }));
+      setNewAuthor('');
+      toast('Author added', { variant: 'success' });
+    } catch {
+      toast('Failed to add author', { variant: 'error' });
+    } finally {
+      setAddingAuthor(false);
+    }
+  };
+
+  const handleAddPublisher = async () => {
+    const name = newPublisher.trim();
+    if (!name) return;
+    setAddingPublisher(true);
+    try {
+      const { data } = await createPublisher({ name });
+      setPublishers((prev) => [...prev, data]);
+      setForm((prev) => ({ ...prev, publisher: String(data.id) }));
+      setNewPublisher('');
+      toast('Publisher added', { variant: 'success' });
+    } catch {
+      toast('Failed to add publisher', { variant: 'error' });
+    } finally {
+      setAddingPublisher(false);
+    }
+  };
 
   const checkIsbn = useCallback(async (isbn) => {
     if (!isbn || isbn.trim().length < 10) {
@@ -131,6 +178,7 @@ export default function BookForm() {
       payload.append('isbn', form.isbn || '');
       if (form.publisher) payload.append('publisher', String(form.publisher));
       if (form.publication_year) payload.append('publication_year', String(form.publication_year));
+      if (form.year_purchased) payload.append('year_purchased', String(form.year_purchased));
       payload.append('description', form.description || '');
       payload.append('total_copies', String(form.total_copies || 1));
       (form.authors || []).forEach((authorId) => payload.append('authors', String(authorId)));
@@ -259,6 +307,17 @@ export default function BookForm() {
                       ))}
                     </select>
                     {fieldError('publisher') && <span className="field-error">{fieldError('publisher')}</span>}
+                    <div className="inline-add">
+                      <input
+                        type="text"
+                        placeholder="Add new publisher"
+                        value={newPublisher}
+                        onChange={(e) => setNewPublisher(e.target.value)}
+                      />
+                      <Button type="button" variant="outline" size="sm" disabled={addingPublisher} onClick={handleAddPublisher}>
+                        {addingPublisher ? 'Adding...' : 'Add'}
+                      </Button>
+                    </div>
                   </div>
                   <div className="form-field">
                     <label htmlFor="publication_year">Publication Year</label>
@@ -270,6 +329,18 @@ export default function BookForm() {
                       value={form.publication_year}
                       onChange={handleChange}
                     />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="year_purchased">Year Purchased</label>
+                    <input
+                      id="year_purchased"
+                      name="year_purchased"
+                      type="number"
+                      placeholder="2024"
+                      value={form.year_purchased}
+                      onChange={handleChange}
+                    />
+                    <span className="field-hint">Used in the verification code (appended once the year ends)</span>
                   </div>
                 </div>
 
@@ -293,7 +364,10 @@ export default function BookForm() {
                     id="authors"
                     name="authors"
                     multiple
+                    ref={authorsSelectRef}
                     value={form.authors}
+                    onFocus={() => setAuthorsOpen(true)}
+                    onClick={() => setAuthorsOpen(true)}
                     onChange={handleChange}
                     className="multi-select"
                   >
@@ -302,6 +376,17 @@ export default function BookForm() {
                     ))}
                   </select>
                   <span className="field-hint">Hold Ctrl/Cmd to select multiple</span>
+                  <div className="inline-add">
+                    <input
+                      type="text"
+                      placeholder="Add new author"
+                      value={newAuthor}
+                      onChange={(e) => setNewAuthor(e.target.value)}
+                    />
+                    <Button type="button" variant="outline" size="sm" disabled={addingAuthor} onClick={handleAddAuthor}>
+                      {addingAuthor ? 'Adding...' : 'Add'}
+                    </Button>
+                  </div>
                 </div>
                 <div className="form-field">
                   <label htmlFor="categories">Categories</label>
@@ -309,7 +394,10 @@ export default function BookForm() {
                     id="categories"
                     name="categories"
                     multiple
+                    ref={categoriesSelectRef}
                     value={form.categories}
+                    onFocus={() => setCategoriesOpen(true)}
+                    onClick={() => setCategoriesOpen(true)}
                     onChange={handleChange}
                     className="multi-select"
                   >

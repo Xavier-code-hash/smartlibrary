@@ -15,6 +15,11 @@ class CustomUser(AbstractUser):
     address = models.TextField(blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     membership_id = models.CharField(max_length=50, unique=True, blank=True, null=True)
+    has_return_issues = models.BooleanField(
+        default=False,
+        help_text='Flag for members with a tendency of not returning books. '
+                  'Flagged members are limited to a maximum of 10 active borrows.',
+    )
 
     def __str__(self):
         return f"{self.username} ({self.get_role_display()})"

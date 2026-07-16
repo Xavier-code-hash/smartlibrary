@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { formatDate } from '../../utils/dateHelpers';
+import { formatDate, formatDueDate } from '../../utils/dateHelpers';
 import './Profile.css';
 
 const statusLabel = {
@@ -65,7 +65,7 @@ export default function Profile() {
               <td>{t.book_title}</td>
               <td>{t.book_author || '-'}</td>
               <td>{formatDate(t.issue_date)}</td>
-              <td>{formatDate(t.due_date)}</td>
+              <td>{formatDueDate(t.due_date)}</td>
               <td>{t.return_date ? formatDate(t.return_date) : '-'}</td>
               <td><span className={`status-pill status-${t.status}`}>{statusLabel[t.status] || t.status}</span></td>
             </tr>

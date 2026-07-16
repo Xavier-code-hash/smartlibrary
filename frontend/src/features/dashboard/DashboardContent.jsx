@@ -3,6 +3,7 @@ import { useAuth } from '../../features/auth/context/AuthContext';
 import api from '../../services/api';
 import { Link } from 'react-router-dom';
 import { ROLES } from '../../utils/constants';
+import { formatDueDate } from '../../utils/dateHelpers';
 import Fines from '../transactions/Fines';
 import {
   Chart as ChartJS,
@@ -257,7 +258,7 @@ export default function DashboardContent() {
                 <tr key={t.id}>
                   <td>{t.title}</td>
                   <td>{t.issue_date ? new Date(t.issue_date).toLocaleDateString() : '-'}</td>
-                  <td>{t.due_date ? new Date(t.due_date).toLocaleDateString() : '-'}</td>
+                  <td>{t.due_date ? formatDueDate(t.due_date) : '-'}</td>
                   <td>{t.status}</td>
                 </tr>
               ))}
@@ -277,7 +278,7 @@ export default function DashboardContent() {
               {stats.overdue.map((t) => (
                 <tr key={t.id}>
                   <td>{t.title}</td>
-                  <td>{t.due_date ? new Date(t.due_date).toLocaleDateString() : '-'}</td>
+                  <td>{t.due_date ? formatDueDate(t.due_date) : '-'}</td>
                   <td>{t.status}</td>
                 </tr>
               ))}

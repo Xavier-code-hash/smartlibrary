@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.conf import settings
 from books.models import Author, Category, Publisher, Book, BookCopy
+from books.utils import generate_isbn13
 from transactions.models import BorrowTransaction, Reservation, Fine
 from core.models import Notification
 from decimal import Decimal
@@ -53,7 +54,7 @@ class Command(BaseCommand):
         categories = {}
         publishers = {}
 
-        for author_name, biography, birth_date in [
+        author_specs = [
             ('Jane Austen', 'Renowned English novelist.', '1775-12-16'),
             ('George Orwell', 'English novelist and essayist.', '1903-06-25'),
             ('Chimamanda Ngozi Adichie', 'Nigerian novelist and writer.', '1977-09-15'),
@@ -74,10 +75,40 @@ class Command(BaseCommand):
             ('Charlotte Brontë', 'English novelist and poet.', '1816-04-21'),
             ('Emily Brontë', 'English novelist and poet.', '1818-07-30'),
             ('Herman Melville', 'American novelist and poet.', '1819-08-01'),
-        ]:
-            authors[author_name] = Author.objects.create(name=author_name, biography=biography, birth_date=birth_date)
+            ('Harper Lee', 'American novelist of the 20th century.', '1926-04-28'),
+            ('Paulo Coelho', 'Brazilian lyricist and novelist.', '1947-08-24'),
+            ('Khaled Hosseini', 'Afghan-American novelist and physician.', '1965-03-04'),
+            ('Michelle Obama', 'American attorney and memoirist.', '1964-01-17'),
+            ('Tara Westover', 'American memoirist and historian.', '1986-09-27'),
+            ('Rebecca Skloot', 'American science writer.', '1972-09-19'),
+            ('Madeline Miller', 'American novelist and classicist.', '1978-07-24'),
+            ('Erin Morgenstern', 'American fantasy novelist.', '1978-07-08'),
+            ('Cal Newport', 'American author and associate professor.', '1982-06-23'),
+            ('Frank Herbert', 'American science-fiction author.', '1920-10-08'),
+            ('Alex Michaelides', 'British-Cypriot novelist.', '1977-05-25'),
+            ('Richard Osman', 'British television presenter and novelist.', '1970-03-28'),
+            ('Amor Towles', 'American novelist.', '1964-01-15'),
+            ('Brit Bennett', 'American novelist and essayist.', '1988-01-01'),
+            ('Matt Haig', 'British author and journalist.', '1975-07-03'),
+            ('Shelby Van Pelt', 'American novelist and short-story writer.', '1980-01-01'),
+            ('Yaa Gyasi', 'Ghanaian-American novelist.', '1989-01-01'),
+            ('Umberto Eco', 'Italian novelist and semiotician.', '1932-01-05'),
+            ('Mikhail Bulgakov', 'Russian novelist and playwright.', '1891-05-15'),
+            ('Cormac McCarthy', 'American novelist and playwright.', '1933-07-20'),
+            ('Ursula K. Le Guin', 'American novelist and fiction writer.', '1929-10-21'),
+            ('Bram Stoker', 'Irish novelist and short-story writer.', '1847-11-08'),
+            ('Arthur Conan Doyle', 'British writer and physician.', '1859-05-22'),
+            ('Dan Brown', 'American author of thriller fiction.', '1964-06-22'),
+            ('Frances Hodgson Burnett', 'British-American novelist and playwright.', '1849-11-24'),
+            ('J.K. Rowling', 'British author and philanthropist.', '1965-07-31'),
+            ('Cal Newport', 'American author and computer scientist.', '1982-06-23'),
+            ('Alex Michaelides', 'British-Cypriot author.', '1977-05-25'),
+            ('Richard Osman', 'British novelist and TV presenter.', '1970-03-28'),
+        ]
+        for name, bio, birth in author_specs:
+            authors[name] = Author.objects.create(name=name, biography=bio, birth_date=birth)
 
-        for category_name, description in [
+        category_specs = [
             ('Fiction', 'Narrative stories and novels'),
             ('Classic', 'Timeless literary classics'),
             ('Science', 'Scientific and educational content'),
@@ -88,21 +119,32 @@ class Command(BaseCommand):
             ('Mystery', 'Suspenseful detective and crime writing'),
             ('Science Fiction', 'Speculative and futuristic fiction'),
             ('Nonfiction', 'Informative and factual writing'),
-        ]:
-            categories[category_name] = Category.objects.create(name=category_name, description=description)
+            ('Poetry', 'Verse and lyrical writing'),
+            ('Romance', 'Stories about love and relationships'),
+            ('Thriller', 'Suspenseful and fast-paced narratives'),
+            ('Philosophy', 'Explorations of thought and existence'),
+            ('Technology', 'Computing and digital innovation'),
+        ]
+        for name, desc in category_specs:
+            categories[name] = Category.objects.create(name=name, description=desc)
 
-        for publisher_name, address, phone in [
-            ('Northwind Press', '12 Market Street', '555-0101'),
-            ('River Books', '88 Lakeview Road', '555-0102'),
-            ('Hearthstone Publishing', '44 Lantern Avenue', '555-0103'),
-            ('Atlas Library House', '9 Harbor Drive', '555-0104'),
-            ('Crescent Media', '77 Skyline Road', '555-0105'),
-            ('Global Literacy Press', '21 Civic Square', '555-0106'),
-        ]:
-            publishers[publisher_name] = Publisher.objects.create(name=publisher_name, address=address, phone=phone)
+        publisher_specs = [
+            ('Northwind Press', '12 Market Street, Nairobi', '+254-20-123-4567', 'info@northwindpress.co.ke', 'https://northwindpress.co.ke'),
+            ('River Books', '88 Lakeview Road, Mombasa', '+254-41-987-6543', 'contact@riverbooks.co.ke', 'https://riverbooks.co.ke'),
+            ('Hearthstone Publishing', '44 Lantern Avenue, Kisumu', '+254-57-456-7890', 'hello@hearthstonepub.co.ke', 'https://hearthstonepub.co.ke'),
+            ('Atlas Library House', '9 Harbor Drive, Nakuru', '+254-51-234-5678', 'books@atlaslibrary.co.ke', 'https://atlaslibrary.co.ke'),
+            ('Crescent Media', '77 Skyline Road, Eldoret', '+254-53-876-5432', 'publish@crescentmedia.co.ke', 'https://crescentmedia.co.ke'),
+            ('Global Literacy Press', '21 Civic Square, Nairobi', '+254-20-345-6789', 'read@globalliteracy.co.ke', 'https://globalliteracy.co.ke'),
+            ('Savannah Publishers', '15 Savannah Lane, Malindi', '+254-42-111-2233', 'info@savannahpub.co.ke', 'https://savannahpub.co.ke'),
+            ('Highland Books', '33 Highland Ave, Nyeri', '+254-60-444-5566', 'sales@highlandbooks.co.ke', 'https://highlandbooks.co.ke'),
+        ]
+        for name, address, phone, email, website in publisher_specs:
+            publishers[name] = Publisher.objects.create(
+                name=name, address=address, phone=phone, email=email, website=website
+            )
 
         book_specs = [
-            {'title': 'Pride and Prejudice', 'author': 'Jane Austen', 'categories': ['Fiction', 'Classic'], 'publisher': 'Northwind Press', 'year': 1813, 'description': 'A romantic novel of manners and social standing.', 'copies': 3, 'prefix': 'PRD'},
+            {'title': 'Pride and Prejudice', 'author': 'Jane Austen', 'categories': ['Fiction', 'Classic'], 'publisher': 'Northwind Press', 'year': 1813, 'purchased': 2019, 'description': 'A romantic novel of manners and social standing.', 'copies': 3, 'prefix': 'PRD'},
             {'title': '1984', 'author': 'George Orwell', 'categories': ['Fiction', 'Science'], 'publisher': 'River Books', 'year': 1949, 'description': 'A dystopian political novel about surveillance and oppression.', 'copies': 3, 'prefix': 'N84'},
             {'title': 'Half of a Yellow Sun', 'author': 'Chimamanda Ngozi Adichie', 'categories': ['Fiction', 'History'], 'publisher': 'River Books', 'year': 2006, 'description': 'A powerful historical novel about Nigeria during the civil war.', 'copies': 2, 'prefix': 'HYS'},
             {'title': 'The Hobbit', 'author': 'J.R.R. Tolkien', 'categories': ['Fantasy', 'Classic'], 'publisher': 'Hearthstone Publishing', 'year': 1937, 'description': 'A classic fantasy adventure following Bilbo Baggins.', 'copies': 3, 'prefix': 'HOB'},
@@ -154,17 +196,24 @@ class Command(BaseCommand):
             {'title': 'The Secret Garden', 'author': 'Frances Hodgson Burnett', 'categories': ['Classic', 'Fiction'], 'publisher': 'River Books', 'year': 1911, 'description': 'A hopeful story of renewal and the healing power of nature.', 'copies': 2, 'prefix': 'SGD'},
         ]
 
+        used_isbns = set()
         created_books = {}
         for index, spec in enumerate(book_specs, start=1):
             author_name = spec['author']
             if author_name not in authors:
                 authors[author_name] = Author.objects.create(name=author_name, biography='Featured contemporary or classic author.', birth_date=None)
 
+            isbn = generate_isbn13()
+            while isbn in used_isbns:
+                isbn = generate_isbn13()
+            used_isbns.add(isbn)
+
             book = Book.objects.create(
                 title=spec['title'],
-                isbn=f'978{index:010d}',
+                isbn=isbn,
                 publisher=publishers[spec['publisher']],
                 publication_year=spec['year'],
+                year_purchased=spec.get('purchased', spec['year'] if spec['year'] < 2024 else 2024),
                 description=spec['description'],
                 total_copies=spec['copies'],
             )
@@ -196,7 +245,6 @@ class Command(BaseCommand):
                 status = 'available' if copy_index == 1 else 'issued' if copy_index == 2 else 'damaged'
                 BookCopy.objects.create(
                     book=book,
-                    barcode=f"{spec['prefix']}-{index:02d}-{copy_index:02d}",
                     status=status,
                 )
 

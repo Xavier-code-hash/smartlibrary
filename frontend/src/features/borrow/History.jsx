@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { useToast } from '../../components/common/Toast';
 import Pagination from '../../components/common/Pagination';
+import { formatDueDate } from '../../utils/dateHelpers';
 import './History.css';
 
 const STATUS_FILTERS = [
@@ -149,7 +150,7 @@ export default function History() {
                 <td><PersonCell person={row.issuer} /></td>
                 <td className="history-date">{formatDateTime(row.issue_date)}</td>
                 <td className={`history-date ${row.is_overdue ? 'history-overdue' : ''}`}>
-                  {formatDateTime(row.due_date)}
+                  {formatDueDate(row.due_date)}
                 </td>
                 <td className="history-date">{formatDateTime(row.return_date)}</td>
                 <td><PersonCell person={row.returner} /></td>

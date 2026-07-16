@@ -3,3 +3,9 @@ export function formatDate(date) {
     year: 'numeric', month: 'short', day: 'numeric',
   });
 }
+
+export function formatDueDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+}

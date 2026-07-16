@@ -13,6 +13,33 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Guarantees only one token refresh runs at a time so concurrent 401s don't
+// spawn multiple refreshes (which would invalidate/blacklist each other).
+let refreshPromise = null;
+
+function doRefresh() {
+  if (refreshPromise) return refreshPromise;
+  refreshPromise = (async () => {
+    const refresh = localStorage.getItem('refresh_token');
+    if (!refresh) throw new Error('No refresh token');
+    const { data } = await axios.post(
+      `${api.defaults.baseURL}/auth/token/refresh/`,
+      { refresh }
+    );
+    localStorage.setItem('access_token', data.access);
+    // Persist the rotated refresh token so subsequent refreshes stay valid.
+    if (data.refresh) {
+      localStorage.setItem('refresh_token', data.refresh);
+    }
+    return data.access;
+  })();
+  // Reset the in-flight promise whether it succeeded or failed.
+  refreshPromise.finally(() => {
+    refreshPromise = null;
+  });
+  return refreshPromise;
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -20,13 +47,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refresh = localStorage.getItem('refresh_token');
-        const { data } = await axios.post(
-          `${api.defaults.baseURL}/auth/token/refresh/`,
-          { refresh }
-        );
-        localStorage.setItem('access_token', data.access);
-        originalRequest.headers.Authorization = `Bearer ${data.access}`;
+        const access = await doRefresh();
+        originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch {
         localStorage.removeItem('access_token');
@@ -39,3 +61,4 @@ api.interceptors.response.use(
 );
 
 export default api;
+

@@ -48,6 +48,44 @@
   margin-top: var(--spacing-4);
 }
 
+.book-detail p .book-code {
+  font-family: monospace;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent, #4f46e5);
+  letter-spacing: 1px;
+}
+
+.book-detail-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+}
+
+.book-detail-qr img {
+  width: 160px;
+  height: 160px;
+  box-shadow: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-2);
+}
+
+.book-detail-qr span {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.book-detail-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-2);
+}
+
 @media (max-width: 768px) {
   .book-detail {
     grid-template-columns: 1fr;

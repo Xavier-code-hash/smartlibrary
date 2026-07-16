@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "generated_for": "Closure Smart Library — Revenue mockup",
+    "currency": "KES",
+    "fine_model": "KES 5 per day overdue (matches transactions.signals.calculate_fine)",
+    "revenue_definition": "Revenue = fines that have been PAID. Derived from Fine(amount, paid=True, paid_at) and surfaced on the dashboard as a 12-month monthly series.",
+    "source_of_truth": "Generated from EXISTING live data (real members, real books, real copies) by the seed_revenue_data command, so the mockup stays aligned with what the system already contains.",
+    "how_to_apply": "python manage.py seed_revenue_data",
+    "aligned_to_live_data": {
+      "books": 51,
+      "copies": 2102,
+      "members": 49,
+      "existing_fines_before_seed": 10,
+      "existing_payments_before_seed": 0
+    }
+  },
+  "assumptions": {
+    "overdue_fine_per_day_kes": 5,
+    "typical_overdue_window_days": [1, 2, 3, 4, 5, 7, 10, 14],
+    "payment_method": "mpesa",
+    "unpaid_fine_ratio": 0.15,
+    "repeat_offenders": "Members with has_return_issues=true generate the bulk of monthly fines (weighted 55% in the generator)."
+  },
+  "monthly_revenue_actual": [
+    { "month": "Aug '25", "collected_kes": 415,  "paid_fines": 20 },
+    { "month": "Sep '25", "collected_kes": 340,  "paid_fines": 14 },
+    { "month": "Oct '25", "collected_kes": 238,  "paid_fines": 10 },
+    { "month": "Nov '25", "collected_kes": 462,  "paid_fines": 16 },
+    { "month": "Dec '25", "collected_kes": 454,  "paid_fines": 18 },
+    { "month": "Jan '26", "collected_kes": 280,  "paid_fines": 15 },
+    { "month": "Feb '26", "collected_kes": 542,  "paid_fines": 18 },
+    { "month": "Mar '26", "collected_kes": 222,  "paid_fines": 8 },
+    { "month": "Apr '26", "collected_kes": 195,  "paid_fines": 11 },
+    { "month": "May '26", "collected_kes": 146,  "paid_fines": 9 },
+    { "month": "Jun '26", "collected_kes": 245,  "paid_fines": 12 },
+    { "month": "Jul '26", "collected_kes": 156,  "paid_fines": 5 }
+  ],
+  "summary": {
+    "total_collected_kes": 3695,
+    "total_paid_fines": 166,
+    "total_unpaid_fines": 29,
+    "average_fine_kes": 22.26,
+    "note": "Figures above are the ACTUAL values produced by seed_revenue_data against the seeded dataset. Because fines are KES 5/day and the library has 49 members, monthly collected revenue is in the low hundreds of KES — realistic for this scale. To model a larger branch, increase member count or the per-day fine rate."
+  }
+}

@@ -10,7 +10,8 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'role', 'phone', 'address', 'date_of_birth', 'membership_id']
+        fields = ['id', 'username', 'email', 'role', 'phone', 'address', 'date_of_birth',
+                   'membership_id', 'has_return_issues']
         read_only_fields = ['id']
 
 
